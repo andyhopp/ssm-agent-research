@@ -171,6 +171,9 @@ def get_messages(instance_id, message_id, access_key, secret_access_key, session
         return ""
     response = json.loads(r.text)
 
+    if (r.status_code != 200):
+      raise Exception(f'{r.status_code} ERROR - {r.reason}: {r.text}')
+
     if len(response["Messages"]) > 0:
         resp_payload = json.loads(response["Messages"][0]["Payload"])
         return resp_payload
@@ -235,5 +238,4 @@ def update_instance_information(hostname, ip_address, instance_id, access_key, s
     r = requests.post(endpoint, data=request_parameters, headers=headers)
 
     print("Update Instance Information -> Response (%s): %s" % (r.status_code, r.text))
-
 
